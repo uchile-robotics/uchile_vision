@@ -10,7 +10,6 @@ cd .local/lib/python2.7/site_packages/torch/nn/modules
 
 Edit activation.py file and add
 
-# SiLU https://arxiv.org/pdf/1606.08415.pdf ----------------------------------------------------------------------------
 class SiLU(Module):  # export-friendly version of nn.SiLU()
     @staticmethod
     def forward(x):
