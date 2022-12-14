@@ -34,7 +34,7 @@ In `/uchile_vision/yolov5/src/yolov5/detect.py` is where the `Yolov5()` class is
 
 In the same file we can choose between setting `self.device` to either `"cpu"` or `"cuda"`. As you can already be thinking, this variable sets the GPU with cuda or CPU functionality of the neural network. 
 
-Last but not least, when creating the `Yolov5()` whe can set the `weights` variable that we desire. From default, the neural network uses `ycb_v8.pt` weights that where trained in Gazebo using YCB dataset. In this same package exist another weight file called `yolov5_jp.pt`. This weights are the default weights of Yolo v5 neural network, which where trained with COCO dataset.
+Last but not least, when creating the `Yolov5()` whe can set the `weights` variable that we desire. From default, the neural network uses `ycb_v8.pt` weights that where trained in Gazebo using YCB dataset. In this same package exists another weight file called `yolov5_jp.pt`. This weights are the default weights of Yolo v5 neural network, which where trained with COCO dataset.
 
 # Solving common issues
 When using `yolov5_jp.pt` we can get an error where a so called SiLU function does not exist. For solving it open a terminal and execute the following commands:
