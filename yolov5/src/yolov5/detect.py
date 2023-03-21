@@ -77,7 +77,8 @@ class YoloV5():
         return detections
 
 def main():
-    det = YoloV5(weights="/home/matias/uchile_ws/ros/jaime/high_ws/src/yolov5/yolov5n.pt")
+    det = YoloV5(weights="/home/ignacio/uchile_ws/ros/maqui/soft_ws/src/yolov5/yolov5n.pt")
+    yolo = YoloV5()
     print("listo")
 
 
