@@ -25,13 +25,13 @@ class detector:
         self.pub = rospy.Publisher("/camera/color/image_detected", Image, queue_size=10)
         self.pubBoxes = rospy.Publisher("/camera/color/detected_data", BoundingBoxes, queue_size=10)
 
-        self.model = YoloV5(weights='/home/matias/uchile_ws/ros/jaime/high_ws/src/yolov5/yolov5_jp.pt') # poner aqui el path completo de los pesos
+        self.model = YoloV5(weights='/home/jaime/uchile_ws/ros/jaime/soft_ws/src/uchile_vision/yolov5/yolov5_jp.pt') # poner aqui el path completo de los pesos
         self.names = self.model.names
+        self.colors = self.model.colors
 
     def callback(self, msg):
         self.img = self.br.imgmsg_to_cv2(msg, desired_encoding="bgr8")
         detections = self.model.detect(self.img)
-
         # creamos el mensaje que será la lista de bounding boxes
         boxes = BoundingBoxes()
         if not detections == []:
@@ -51,12 +51,12 @@ class detector:
                 box.ymax = y2
                 box.id = i_label.item()
                 box.Class = label
+                
                 #la ponemos en la lista de bounding boxes
                 boxes.bounding_boxes.append(box)
-                
-                self.img = cv2.rectangle(self.img, (_x, _y), (_x +_w, _y + _h), (0,255,0), 2)
-                self.img = cv2.putText(self.img, label, (_x,_y + 40), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,255,0), 2, cv2.LINE_AA)
-                print("detecte un",label, " con confianza de ", cls_conf.item())
+                self.img = cv2.rectangle(self.img, (_x, _y), (_x +_w, _y + _h), self.colors[int(i_label.item())], 2)
+                self.img = cv2.putText(self.img, label, (_x,_y - 10), cv2.FONT_HERSHEY_SIMPLEX, 1, self.colors[int(i_label.item())], 2, cv2.LINE_AA)
+                print("detecte un " + str(label) + " con confianza de " + str(cls_conf.item()))
         self.pubBoxes.publish(boxes)
         self.pub.publish(self.br.cv2_to_imgmsg(self.img, "bgr8"))
 
