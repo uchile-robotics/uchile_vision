@@ -16,7 +16,7 @@ class YoloV5():
     def __init__(self, weights='ycb_v8.pt', img_size=640, conf_thres=0.3, iou_thres=0.5):
         cudnn.benchmark = True
         self.weights = weights
-        self.device = 'cuda'
+        self.device = 'cpu'
         self.conf_thres = conf_thres
         self.iou_thres = iou_thres
         
@@ -77,7 +77,7 @@ class YoloV5():
         return detections
 
 def main():
-    det = YoloV5(weights="/home/matias/uchile_ws/ros/jaime/high_ws/src/yolov5/yolov5n.pt")
+    det = YoloV5(weights="/home/leslie/uchile_ws/ros/bender/soft_ws/src/uchile_vision/yolov5/yolov5_jp.pt")
     print("listo")
 
 
