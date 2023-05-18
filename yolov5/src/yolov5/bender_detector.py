@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import roslib
-roslib.load_manifest('cv_bridge')
-
 import cv2
 import tf
 import tf2_ros
@@ -63,14 +60,11 @@ class detector:
         self.pubBoxes.publish(boxes)
         self.pub.publish(self.br.cv2_to_imgmsg(self.img, "bgr8"))
 
-        cv2.imshow("Image window", self.img)
-        cv2.waitKey(3)
-
 def main():
     
     Det = detector()
     rospy.init_node("hola")
-    # cv2.imshow("Image window", Det.img)
+    
     try:
         rospy.spin()
     except KeyboardInterrupt:
