@@ -61,15 +61,13 @@ class detector:
         self.pub.publish(self.br.cv2_to_imgmsg(self.img, "bgr8"))
 
 def main():
-    
     Det = detector()
-    rospy.init_node("hola")
+    rospy.init_node("yolov5", anonymous=True)
     
     try:
         rospy.spin()
     except KeyboardInterrupt:
         print("Apagando modulo de deteccion de imagenes")
-    cv2.destroyAllWindows()
 
 if __name__=="__main__":
     main()
