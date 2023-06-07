@@ -21,7 +21,7 @@ add_library(DepthImageToLaserScan src/DepthImageToLaserScan.cpp)
 target_link_libraries(DepthImageToLaserScan ${catkin_LIBRARIES})
 
 add_library(DepthImageToLaserScanROS src/DepthImageToLaserScanROS.cpp)
-add_dependencies(DepthImageToLaserScanROS depthimage_to_laserscan_gencfg)
+add_dependencies(DepthImageToLaserScanROS ${PROJECT_NAME}_gencfg)
 target_link_libraries(DepthImageToLaserScanROS DepthImageToLaserScan ${catkin_LIBRARIES})
 
 add_library(DepthImageToLaserScanNodelet src/DepthImageToLaserScanNodelet.cpp)
@@ -45,7 +45,7 @@ install(TARGETS DepthImageToLaserScan DepthImageToLaserScanROS DepthImageToLaser
 	LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
 	ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION})
 
-install(DIRECTORY include/depthimage_to_laserscan/
+install(DIRECTORY include/${PROJECT_NAME}/
         DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
 )
 install(FILES nodelets.xml
