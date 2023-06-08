@@ -3,3 +3,4 @@ torchvision==0.5.0
 tqdm==4.59.0
 pathlib
 scipy
+future
