@@ -42,6 +42,10 @@ class Inpainting():
         dst = cv2.inpaint(depth_image, edges, 3, cv2.INPAINT_TELEA)
         dst = (dst).astype('uint16')*ratio
         msg = self.bridge.cv2_to_imgmsg(dst, encoding="passthrough")
+
+        now = rospy.Time.now()
+        msg.header.stamp = now
+        camera_info.header.stamp = now
         self.pub_inpainted.publish(msg)
         self.pub_camera_info.publish(camera_info)
 
