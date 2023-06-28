@@ -12,7 +12,7 @@ class Inpainting():
         # objects
         self.bridge = CvBridge()
         
-        self.pub_inpainted = rospy.Publisher("/camera/depth_inpainted/camera_rect_raw", Image, queue_size=3)
+        self.pub_inpainted = rospy.Publisher("/camera/depth_inpainted/image_rect_raw", Image, queue_size=3)
         self.pub_camera_info = rospy.Publisher("/camera/depth_inpainted/camera_info", CameraInfo, queue_size=3)
 
         self.image_sub = message_filters.Subscriber("/camera/depth/image_rect_raw", Image)

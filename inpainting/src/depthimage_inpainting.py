@@ -3,21 +3,27 @@ import time
 import cv2
 import rospy
 from cv_bridge import CvBridge
-from sensor_msgs.msg import Image
+from sensor_msgs.msg import Image, CameraInfo
 import numpy as np
 class Inpainting():
     def __init__(self):
 
         # objects
         self.bridge = CvBridge()
-        self.sub = rospy.Subscriber("/camera/depth/image_rect_raw", Image, self.depth_callback)
-        self.pub = rospy.Publisher("/camera/depth/inpainted", Image, queue_size=1)
+        self.sub_depth = rospy.Subscriber("/camera/depth/image_rect_raw", Image, self.depth_callback)
+        self.sub_info  = rospy.Subscriber("/camera/depth/camera_info", CameraInfo, self.camerainfo_callback)
+        self.pub = rospy.Publisher("/camera/depth_inpainted/image_rect_raw", Image, queue_size=1)
+        self.pub_info = rospy.Publisher("/camera/depth_inpainted/camera_info", CameraInfo, queue_size=1)
 
         # data
         self.depthimage = None
+        self.camerainfo = None
 
     def depth_callback(self, img_raw):
         self.depthimage = self.bridge.imgmsg_to_cv2(img_raw, desired_encoding='passthrough')
+
+    def camerainfo_callback(self, camerainfo):
+        self.camerainfo = camerainfo
 
     def showImg(self):
         cv2.imshow('image', self.depthimage)
@@ -33,6 +39,7 @@ class Inpainting():
         dst = (dst).astype('uint16')*ratio
         msg = self.bridge.cv2_to_imgmsg(dst, encoding="passthrough")
         self.pub.publish(msg)
+        self.pub_info.publish(self.camerainfo)
 
 if __name__=="__main__":
     try:
