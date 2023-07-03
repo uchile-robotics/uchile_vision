@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 2.8)
 project(depthimage_to_laserscan_2)
 
 # Load catkin and all dependencies required for this package
-find_package(catkin REQUIRED tf dynamic_reconfigure image_geometry image_transport nodelet roscpp sensor_msgs)
+find_package(catkin REQUIRED tf dynamic_reconfigure image_geometry image_transport nodelet roscpp sensor_msgs depthimage_to_laserscan)
 #find_package(OpenCV REQUIRED)
 
 # Dynamic reconfigure support
