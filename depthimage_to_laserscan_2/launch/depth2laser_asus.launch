@@ -1,0 +1,69 @@
+<!--
+	Sample launch file for depthimage_to_laserscan
+	As of September 2nd 2021.
+-->
+
+<launch>
+  <arg name="inpainting" default="false" />
+
+<include file="$(find openni2_launch)/launch/openni2.launch" />
+<group if="$(arg inpainting)" >
+  <node name="inpainting" pkg="inpainting" type="depthimage_inpainting_plus.py" args="" if="$(arg inpainting)"/>
+
+  <node name="depthimage_to_laserscan_inpainted" pkg="depthimage_to_laserscan_2" type="depthimage_to_laserscan" args="" >
+
+    <remap from="image"       to="/camera/depth_inpainted/image_rect_raw"/> <!-- change here for your camera depth topic name. Default: "/camera/depth/image_raw" -->
+    <remap from="camera_info" to="/camera/depth_inpainted/camera_info"/> 
+    <remap from="scan" to="/depth_2_laser/inpainted"/> 
+    <!-- the remap for camera_info by default uses the same path as the one given to the image topic. Default: "<path_to_image_topic>/camera_info>" -->
+    <param name="min_scan_height" type="double" value="0.06"/>
+    <param name="max_scan_height" type="double" value="0.7"/>
+    <param name="camerasensor_frame_id" type="str" value="camera_depth_optical_frame"/>
+    <param name="scan_frame_id" type="str" value="base_footprint"/>
+    <param name="output_frame_id" type="str" value="laser"/>
+  </node>
+
+  <node pkg="ira_laser_tools" name="laserscan_multi_merger_inpainted" type="laserscan_multi_merger" output="screen" >
+    <param name="destination_frame" value="base_link"/>
+    <param name="cloud_destination_topic" value="/merged_cloud"/>
+    <param name="scan_destination_topic" value="/scan_multi"/> <!-- SCAN TOPIC TO PUBLIC -->
+    <param name="laserscan_topics" value ="/hokuyo /depth_2_laser/inpainted" /> <!-- LIST OF THE LASER SCAN TOPICS TO SUBSCRIBE -->
+    <param name="angle_min" value="-1.0"/>
+    <param name="angle_max" value="1.0"/>
+    <param name="angle_increment" value="0.0058"/>
+    <param name="scan_time" value="0.0333333"/>
+    <param name="range_min" value="0.30"/>
+    <param name="range_max" value="50.0"/>
+	</node>
+</group>
+
+<group unless="$(arg inpainting)" >
+
+  <node name="depthimage_to_laserscan_normal" pkg="depthimage_to_laserscan_2" type="depthimage_to_laserscan" args="">
+
+    <remap from="image"       to="/camera/depth/image_rect_raw"/> <!-- change here for your camera depth topic name. Default: "/camera/depth/image_raw" -->
+    <remap from="camera_info" to="/camera/depth/camera_info"/> 
+    <remap from="scan" to="/depth_2_laser/normal"/> 
+    <!-- the remap for camera_info by default uses the same path as the one given to the image topic. Default: "<path_to_image_topic>/camera_info>" -->
+    <param name="min_scan_height" type="double" value="0.25"/>
+    <param name="max_scan_height" type="double" value="0.6"/>
+    <param name="camerasensor_frame_id" type="str" value="camera_depth_optical_frame"/>
+    <param name="scan_frame_id" type="str" value="base_footprint"/>
+    <param name="output_frame_id" type="str" value="laser"/>
+  </node>	
+  
+  <node pkg="ira_laser_tools" name="laserscan_multi_merger_normal" type="laserscan_multi_merger" output="screen">
+    <param name="destination_frame" value="base_link"/>
+    <param name="cloud_destination_topic" value="/merged_cloud"/>
+    <param name="scan_destination_topic" value="/scan_multi"/> <!-- SCAN TOPIC TO PUBLIC -->
+    <param name="laserscan_topics" value ="/hokuyo /depth_2_laser/normal" /> <!-- LIST OF THE LASER SCAN TOPICS TO SUBSCRIBE -->
+    <param name="angle_min" value="-1.0"/>
+    <param name="angle_max" value="1.0"/>
+    <param name="angle_increment" value="0.0058"/>
+    <param name="scan_time" value="0.0333333"/>
+    <param name="range_min" value="0.30"/>
+    <param name="range_max" value="50.0"/>
+	</node>
+</group>
+
+</launch>
