@@ -13,7 +13,7 @@ from models.experimental import attempt_load
 from utils.datasets import letterbox
 
 class YoloV5():
-    def __init__(self, weights='ycb_v8.pt', img_size=640, conf_thres=0.3, iou_thres=0.5):
+    def __init__(self, weights='yolov5_jp.pt', img_size=640, conf_thres=0.3, iou_thres=0.5):
         cudnn.benchmark = True
         self.weights = weights
         self.device = 'cuda'
