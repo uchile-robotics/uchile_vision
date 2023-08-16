@@ -6,11 +6,13 @@
 <launch>
   <arg name="inpainting" default="false" />
 
-<include file="$(find depth_module)/launch/rs_depth_module.launch" />
-<group if="$(arg inpainting)" >
-  <node name="inpainting" pkg="inpainting" type="depthimage_inpainting_plus.py" args="" if="$(arg inpainting)"/>
+<include file="$(find depth_module)/src/launch/rs_depth_module.launch" />
 
-  <node name="depthimage_to_laserscan_inpainted" pkg="depthimage_to_laserscan_2" type="depthimage_to_laserscan" args="" >
+<group if="$(arg inpainting)" >
+  <node name="inpainting" pkg="inpainting" type="depth_inpainter" args="" if="$(arg inpainting)"/>
+  <node name="inpainting_publisher" pkg="inpainting" type="depthimage_inpainting_16bit.py" args="" if="$(arg inpainting)"/>
+
+  <node name="depthimage_to_laserscan_inpainted" pkg="depthimage_to_laserscan" type="depthimage_to_laserscan" args="" >
 
     <remap from="image"       to="/camera/depth_inpainted/image_rect_raw"/> <!-- change here for your camera depth topic name. Default: "/camera/depth/image_raw" -->
     <remap from="camera_info" to="/camera/depth_inpainted/camera_info"/> 
@@ -39,7 +41,7 @@
 
 <group unless="$(arg inpainting)" >
 
-  <node name="depthimage_to_laserscan_normal" pkg="depthimage_to_laserscan_2" type="depthimage_to_laserscan" args="">
+  <node name="depthimage_to_laserscan_normal" pkg="depthimage_to_laserscan" type="depthimage_to_laserscan" args="">
 
     <remap from="image"       to="/camera/depth/image_rect_raw"/> <!-- change here for your camera depth topic name. Default: "/camera/depth/image_raw" -->
     <remap from="camera_info" to="/camera/depth/camera_info"/> 
