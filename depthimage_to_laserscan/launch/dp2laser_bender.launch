@@ -1,0 +1,15 @@
+<launch>
+
+  <node name="depthimage_to_laserscan_normal" pkg="depthimage_to_laserscan" type="depthimage_to_laserscan" args="">
+    <remap from="image"         to="/bender/sensors/d435_camera/depth/image_raw"/> <!-- change here for your camera depth topic name. Default: "/camera/depth/image_raw" -->
+    <remap from="camera_info"   to="/bender/sensors/d435_camera/depth/camera_info"/> 
+    <remap from="scan"          to="/depth_2_laser/normal"/>
+    <!-- the remap for camera_info by default uses the same path as the one given to the image topic. Default: "<path_to_image_topic>/camera_info>" -->
+    <param name="min_scan_height" type="double" value="0.06"/>
+    <param name="max_scan_height" type="double" value="1.60"/>
+    <param name="camerasensor_frame_id" type="str" value="d435_camera_depth_optical_frame"/>
+    <param name="scan_frame_id" type="str" value="bender/base_footprint"/>
+    <param name="output_frame_id" type="str" value="bender/sensors/laser_front_link"/>
+  </node>	
+  
+</launch>
