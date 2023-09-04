@@ -1,0 +1,29 @@
+<launch>
+  <arg name="laser1" default="/bender/sensors/laser_front/scan" />
+  <arg name="laser2" default="/bender/sensors/d435_camera/laser/scan" />
+
+  <node name="depthimage_to_laserscan_normal" pkg="depthimage_to_laserscan" type="depthimage_to_laserscan" args="">
+    <remap from="image"         to="/bender/sensors/d435_camera/depth/image_raw"/> <!-- change here for your camera depth topic name. Default: "/camera/depth/image_raw" -->
+    <remap from="camera_info"   to="/bender/sensors/d435_camera/depth/camera_info"/> 
+    <remap from="scan"          to="/bender/sensors/d435_camera/laser/scan"/>
+    <!-- the remap for camera_info by default uses the same path as the one given to the image topic. Default: "<path_to_image_topic>/camera_info>" -->
+    <param name="min_scan_height" type="double" value="0.06"/>
+    <param name="max_scan_height" type="double" value="1.60"/>
+    <param name="camerasensor_frame_id" type="str" value="d435_camera_depth_optical_frame"/>
+    <param name="scan_frame_id" type="str" value="bender/base_footprint"/>
+    <param name="output_frame_id" type="str" value="d435_camera_depth_frame"/>
+    <param name="range_min" value="0.45"/>
+    <param name="range_max" value="5.0"/>
+  </node>	
+  
+  <node pkg="ira_laser_tools" name="laserscan_multi_merger" type="laserscan_multi_merger" output="screen">
+    <param name="destination_frame" value="bender/base_link"/>
+    <param name="cloud_destination_topic" value="/merged_cloud"/>
+    <param name="scan_destination_topic" value="/bender/sensors/scan_multi"/> <!-- SCAN TOPIC TO PUBLISH -->
+    <param name="laserscan_topics" value ="$(arg laser1) $(arg laser2)" /> <!-- LIST OF THE LASER SCAN TOPICS TO SUBSCRIBE -->
+    <param name="scan_time" value="0.0333333"/>
+    <param name="range_min" value="0.30"/>
+    <param name="range_max" value="50.0"/>
+	</node>
+  
+</launch>
