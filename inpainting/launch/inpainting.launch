@@ -1,0 +1,8 @@
+<launch>
+
+  <include file="$(find depth_module)/src/launch/rs_depth_module.launch" />
+
+  <node name="inpainting" pkg="inpainting" type="depth_inpainter" args="" if="true"/>
+  <!-- <node name="inpainting_publisher" pkg="inpainting" type="depthimage_inpainting_16bit.py" args="" if="true"/> -->
+
+</launch>

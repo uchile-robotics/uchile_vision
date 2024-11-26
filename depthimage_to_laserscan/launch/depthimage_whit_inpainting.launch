@@ -1,0 +1,7 @@
+<launch>
+  <!-- Lanza el archivo inpainting.launch -->
+  <include file="$(find inpainting)/launch/inpainting.launch" />
+
+  <!-- Lanza el archivo depthimage_to_laser_realsense.launch -->
+  <include file="$(find depthimage_to_laserscan)/launch/depthimage_to_laser_realsense.launch" />
+</launch>

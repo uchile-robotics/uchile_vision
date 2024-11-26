@@ -16,7 +16,7 @@ find_package(catkin REQUIRED COMPONENTS
   message_filters
 )
 
-find_package(OpenCV 3.2 REQUIRED)
+find_package(OpenCV 4.2 REQUIRED)
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
 
@@ -211,6 +211,52 @@ include_directories(
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
+cmake_minimum_required(VERSION 3.0.2)
+project(inpainting)
 
+# Compilar como C++11
+add_compile_options(-std=c++14)
+
+
+# Encontrar paquetes de catkin y otras librerías necesarias
+find_package(catkin REQUIRED COMPONENTS
+  cv_bridge
+  image_transport
+  roscpp
+  sensor_msgs
+  std_msgs
+  pcl_ros
+  message_filters
+)
+
+# Encontrar OpenCV y PCL
+find_package(OpenCV REQUIRED)
+find_package(PCL REQUIRED)
+
+# Declarar el paquete de catkin y sus dependencias
+catkin_package(
+  CATKIN_DEPENDS roscpp sensor_msgs std_msgs cv_bridge image_transport pcl_ros
+)
+
+# Incluir directorios
+include_directories(
+  ${catkin_INCLUDE_DIRS}
+  ${OpenCV_INCLUDE_DIRS}
+  ${PCL_INCLUDE_DIRS}
+)
+
+# Ejecutable para depth_inpainter
 add_executable(depth_inpainter src/depth_inpainter.cpp)
-target_link_libraries(depth_inpainter ${catkin_LIBRARIES} ${OpenCV_LIBS})
+target_link_libraries(depth_inpainter ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
+
+# Ejecutable para dbscan2 en scripts
+add_executable(dbscan2 scripts/dbscan2.cpp)
+target_link_libraries(dbscan2 ${catkin_LIBRARIES} ${PCL_LIBRARIES} ${OpenCV_LIBRARIES})
+
+# Asegurarse de que PCL esté correctamente enlazado
+link_directories(${PCL_LIBRARY_DIRS})
+add_definitions(${PCL_DEFINITIONS})
+find_package(Open3D REQUIRED)
+
+include_directories(${Open3D_INCLUDE_DIRS})
+target_link_libraries(dbscan2 ${catkin_LIBRARIES} ${OpenCV_LIBS} ${Open3D_LIBRARIES})
